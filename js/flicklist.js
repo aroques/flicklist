@@ -8,7 +8,7 @@ var model = {
 
 var api = {
   root: "https://api.themoviedb.org/3",
-  token: "TODO" // TODO 0 put your api key here
+  token: "72b58bbab02fb846a16e1d36d1db2162" // DONE 0 put your api key here
 }
 
 
@@ -27,8 +27,11 @@ function discoverMovies(callback) {
 			console.log("We got a response from The Movie DB!");
 			console.log(response);
 			
-			// TODO 2
+			// DONE 2
 			// update the model, setting its .browseItems property equal to the movies we recieved in the response
+			model.browseItems = response.results;
+			// fetch upstream studio1-staff-solution
+			// launch code youTube channel
 			
 			// invoke the callback function that was passed in. 
 			callback();
@@ -42,21 +45,35 @@ function discoverMovies(callback) {
  * re-renders the page with new content, based on the current state of the model
  */
 function render() {
-  // TODO 7
+  // DONE 7
   // clear everything from both lists
+  $("#section-watchlist ul").empty();
+  $("#section-browse ul").empty();
   
-  // TODO 6
+  // DONE 6
   // for each movie on the user's watchlist, insert a list item into the <ul> in the watchlist section
+  model.watchlistItems.forEach(function(movie) {
+  	var itemView = $("<li></li>").text(movie.original_title);
+  	$("#section-watchlist ul").append(itemView);
+  	
+  });
   
   // for each movie on the current browse list, 
   model.browseItems.forEach(function(movie) {
-		// TODO 3
+		// DONE 3
 		// insert a list item into the <ul> in the browse section
+		var title = $("<p></p>").text(movie.original_title);
 		
-		// TODO 4
+		// DONE 4
 		// the list item should include a button that says "Add to Watchlist"
+		var button = $("<button></button>").text("Add to Watchlist").click(function() {
+			model.watchlistItems.push(movie);
+			render();
+		});
+		var itemView = $("<li></li>").append(title).append(button);
 		
-		// TODO 5
+		$('#section-browse ul').append(itemView);
+		// DONE 5
 		// when the button is clicked, this movie should be added to the model's watchlist and render() should be called again
   });
   
