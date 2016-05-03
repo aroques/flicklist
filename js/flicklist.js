@@ -9,13 +9,13 @@ $(document).ready(function() {
 var model = {
   watchlistItems: [],
   browseItems: []
-}
+};
 
 
 var api = {
   root: "https://api.themoviedb.org/3",
-  token: "8e888fa39ec243e662e1fb738c42ae99" // TODO 0 add your api key
-}
+  token: "72b58bbab02fb846a16e1d36d1db2162" // DONE 0 add your api key
+};
 
 
 /**
@@ -48,11 +48,20 @@ function discoverMovies(callback) {
 function searchMovies(searchTerm, callback) {
   console.log("searching for movies with '" + searchTerm + "' in their title...");
 
-  // TODO 9
+  // DONE 9
   // implement this function as described in the comment above
   // you can use the body of discoverMovies as a jumping off point
-
-
+  $.ajax({
+    url: api.root + "/search/movie",
+    data: {
+      api_key: api.token,
+      query: searchTerm
+    },
+    success:function(response) {
+      model.browseItems = response.results;
+      callback();
+    }
+  });
 }
 
 
@@ -70,8 +79,9 @@ function render() {
     var title = $("<p></p>").text(movie.original_title);
     var itemView = $("<li></li>")
       .append(title)
-      // TODO 3
+      // DONE 3
       // give itemView a class attribute of "item-watchlist"
+      .attr("class", "item-watchlist");
 
     $("#section-watchlist ul").append(itemView);
   });
@@ -85,22 +95,28 @@ function render() {
         model.watchlistItems.push(movie);
         render();
       });
-      // TODO 2
+      // DONE 2
       // the button should be disabled if this movie is already in
       // the user's watchlist
       // see jQuery .prop() and Array.indexOf()
+      if (model.watchlistItems.indexOf(movie) !== -1)
+      {
+        button.prop("disabled", true);
+      }
 
 
-    // TODO 1
+    // DONE 1
     // create a paragraph containing the movie object's .overview value
     // then, in the code block below,
     // append the paragraph in between the title and the button
+    var movieDescription = $("<p></p>").text(movie.overview);
 
 
     // append everything to itemView, along with an <hr/>
     var itemView = $("<li></li>")
       .append($("<hr/>"))
       .append(title)
+      .append(movieDescription)
       .append(button);
 
     // append the itemView to the list
